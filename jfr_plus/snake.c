@@ -31,9 +31,15 @@ void main_snake(){
     node *head = malloc(sizeof(node));
     node *n1 = malloc(sizeof(node));
     node *n2 = malloc(sizeof(node));
+
+    if(head == NULL || n1 == NULL || n2 == NULL) {
+        setSquare(0, 0, 0x55);
+        while(1);
+    }
+
     head->x = 5; head->y = 5;
     n1->x = 5; n1->y = 6;
-    n2->x = 5; n2->y = 7;
+    n2->x = 7; n2->y = 7;
     head->next = n1;
     n1->next = n2;
     n2->next = NULL;
@@ -82,13 +88,13 @@ void main_snake(){
             setSquare(head->x, head->y, 0x23);
 
             node *current = head;
-            while (current->next->next != NULL) {
+            while (current->next->next != NULL)
                 current = current->next;
-            }
+
             setSquare(current->next->x, current->next->y, 0x00);
             free(current->next);
             current->next = NULL;
-            iteration++;
         }
+        iteration++;
     }
 }
