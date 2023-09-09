@@ -7,7 +7,6 @@ unsigned int matrix_height = 35;
 
 unsigned int margins = 50;
 
-
 void setSquare(int x, int y, unsigned char attr){
     int cell_height = (screen_height - 2 * margins) / matrix_height;
     int cell_width = cell_height;

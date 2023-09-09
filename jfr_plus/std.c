@@ -68,3 +68,10 @@ void free(void* ptr) {
         free_list = block;
     }
 }
+
+// Get the current time in seconds
+unsigned int get_time_seconds() {
+    unsigned int time;
+    asm volatile("mrc p15, 0, %0, c9, c14, 0" : "=r"(time));
+    return time;
+}
