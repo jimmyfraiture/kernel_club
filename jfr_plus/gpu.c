@@ -3,7 +3,7 @@
 unsigned int screen_width = 1920;
 unsigned int screen_height = 1080;
 unsigned int matrix_width = 40;
-unsigned int matrix_height = 30;
+unsigned int matrix_height = 35;
 
 unsigned int margins = 50;
 
