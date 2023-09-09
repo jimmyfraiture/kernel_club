@@ -50,28 +50,27 @@ void main_snake(){
     setSquare(n1->x, n1->y, 0x23);
     setSquare(n2->x, n2->y, 0x23);
     while (1) {
-        if (iteration % 1000 == 0) {
-            if (uart_isReadByteReady()) {
-                char c = uart_readByte();
-                if (c == 'w') {
-                    x_direction = 0;
-                    y_direction = -1;
-                } else if (c == 'a') {
-                    x_direction = -1;
-                    y_direction = 0;
-                } else if (c == 's') {
-                    x_direction = 0;
-                    y_direction = 1;
-                } else if (c == 'd') {
-                    x_direction = 1;
-                    y_direction = 0;
-                }
+        if (uart_isReadByteReady()) {
+            char c = uart_readByte();
+            if (c == 'w') {
+                x_direction = 0;
+                y_direction = -1;
+            } else if (c == 'a') {
+                x_direction = -1;
+                y_direction = 0;
+            } else if (c == 's') {
+                x_direction = 0;
+                y_direction = 1;
+            } else if (c == 'd') {
+                x_direction = 1;
+                y_direction = 0;
             }
+        }
 
+        if (iteration % 1000 == 0) {
             if (iteration % 20000 == 0) {
                 add_random_bonus();
             }
-
             int new_x = head->x + x_direction;
             int new_y = head->y + y_direction;
 
