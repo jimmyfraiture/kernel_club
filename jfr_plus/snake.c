@@ -39,7 +39,7 @@ void main_snake(){
 
     head->x = 5; head->y = 5;
     n1->x = 5; n1->y = 6;
-    n2->x = 7; n2->y = 7;
+    n2->x = 6; n2->y = 6;
     head->next = n1;
     n1->next = n2;
     n2->next = NULL;
