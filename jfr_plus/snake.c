@@ -31,9 +31,15 @@ void main_snake(){
     node *head = malloc(sizeof(node));
     node *n1 = malloc(sizeof(node));
     node *n2 = malloc(sizeof(node));
+
+    if(head == NULL || n1 == NULL || n2 == NULL) {
+        setSquare(0, 0, 0x55);
+        while(1);
+    }
+
     head->x = 5; head->y = 5;
     n1->x = 5; n1->y = 6;
-    n2->x = 5; n2->y = 7;
+    n2->x = 7; n2->y = 7;
     head->next = n1;
     n1->next = n2;
     n2->next = NULL;
@@ -44,28 +50,27 @@ void main_snake(){
     setSquare(n1->x, n1->y, 0x23);
     setSquare(n2->x, n2->y, 0x23);
     while (1) {
-        if (iteration % 1000 == 0) {
-            if (uart_isReadByteReady()) {
-                char c = uart_readByte();
-                if (c == 'w') {
-                    x_direction = 0;
-                    y_direction = -1;
-                } else if (c == 'a') {
-                    x_direction = -1;
-                    y_direction = 0;
-                } else if (c == 's') {
-                    x_direction = 0;
-                    y_direction = 1;
-                } else if (c == 'd') {
-                    x_direction = 1;
-                    y_direction = 0;
-                }
+        if (uart_isReadByteReady()) {
+            char c = uart_readByte();
+            if (c == 'w') {
+                x_direction = 0;
+                y_direction = -1;
+            } else if (c == 'a') {
+                x_direction = -1;
+                y_direction = 0;
+            } else if (c == 's') {
+                x_direction = 0;
+                y_direction = 1;
+            } else if (c == 'd') {
+                x_direction = 1;
+                y_direction = 0;
             }
+        }
 
+        if (iteration % 1000 == 0) {
             if (iteration % 20000 == 0) {
                 add_random_bonus();
             }
-
             int new_x = head->x + x_direction;
             int new_y = head->y + y_direction;
 
@@ -82,13 +87,13 @@ void main_snake(){
             setSquare(head->x, head->y, 0x23);
 
             node *current = head;
-            while (current->next->next != NULL) {
+            while (current->next->next != NULL)
                 current = current->next;
-            }
+
             setSquare(current->next->x, current->next->y, 0x00);
             free(current->next);
             current->next = NULL;
-            iteration++;
         }
+        iteration++;
     }
 }
