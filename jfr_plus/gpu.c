@@ -9,8 +9,8 @@ unsigned int margins = 50;
 
 
 void setSquare(int x, int y, unsigned char attr){
-    int cell_width = (screen_width - 2 * margins) / matrix_width;
     int cell_height = (screen_height - 2 * margins) / matrix_height;
+    int cell_width = cell_height;
 
     int x0 = margins + x * cell_width;
     int y0 = margins + y * cell_height;
