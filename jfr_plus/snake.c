@@ -39,7 +39,7 @@ void main_snake(){
 
     head->x = 5; head->y = 5;
     n1->x = 5; n1->y = 6;
-    n2->x = 7; n2->y = 7;
+    n2->x = 6; n2->y = 6;
     head->next = n1;
     n1->next = n2;
     n2->next = NULL;
@@ -49,6 +49,9 @@ void main_snake(){
     setSquare(head->x, head->y, 0x23);
     setSquare(n1->x, n1->y, 0x23);
     setSquare(n2->x, n2->y, 0x23);
+
+    long long last_iteration_time = get_system_timer_seconds();
+
     while (1) {
         if (uart_isReadByteReady()) {
             char c = uart_readByte();
@@ -67,8 +70,8 @@ void main_snake(){
             }
         }
 
-        if (iteration % 1000 == 0) {
-            if (iteration % 20000 == 0) {
+        if (get_system_timer_seconds() - last_iteration_time >= 1) {
+            if (iteration % 100 == 0) {
                 add_random_bonus();
             }
             int new_x = head->x + x_direction;
@@ -93,7 +96,8 @@ void main_snake(){
             setSquare(current->next->x, current->next->y, 0x00);
             free(current->next);
             current->next = NULL;
+            last_iteration_time = get_system_timer_seconds();
+            iteration++;
         }
-        iteration++;
     }
 }
