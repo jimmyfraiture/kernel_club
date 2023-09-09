@@ -46,7 +46,7 @@ void debug_print(long l) {
 void main()
 {
     uart_init();
-    fb_init();
+    // fb_init();
 
     Point points[3] = {
         {100, 100, 2, -2, 10, 0xee},
@@ -54,23 +54,25 @@ void main()
         {75, 250, 2, 3, 30, 0xaa},
     };
 
+    uart_writeText("???");
+
     while (1) {
         // Clear.
-        for (int i = 0; i < 2; ++i) {
-            drawCircle(
-                points[i].x - points[i].dy, 
-                points[i].y - points[i].dy, 
-                30, 
-                0x00, 
-                1
-            );
-        }
+        // for (int i = 0; i < 2; ++i) {
+        //     drawCircle(
+        //         points[i].x - points[i].dy, 
+        //         points[i].y - points[i].dy, 
+        //         30, 
+        //         0x00, 
+        //         1
+        //     );
+        // }
 
         uart_writeText("Hello");
 
         // Simulate physics.
         for (int i = 0; i < 2; ++i) {
-            updatePoint(&points[i]);
+            // updatePoint(&points[i]);
 
             // Debug.
             uart_writeText("Point:");
@@ -81,11 +83,11 @@ void main()
         }
 
         // Draw objects.
-        for (int i = 0; i < 2; ++i) {
-            drawCircle(points[i].x, points[i].y, points[i].r, points[i].color, 1);
-        }
+        // for (int i = 0; i < 2; ++i) {
+        //     drawCircle(points[i].x, points[i].y, points[i].r, points[i].color, 1);
+        // }
 
         // Wait a bit.
-        sleep();
+        // sleep();
     }
 }
