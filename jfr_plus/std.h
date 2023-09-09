@@ -9,4 +9,4 @@ typedef unsigned int size_t;
 void initialize_heap();
 void* malloc(size_t size);
 void free(void* ptr);
-unsigned int get_time_seconds();
+unsigned int get_system_timer_seconds();

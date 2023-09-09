@@ -50,7 +50,7 @@ void main_snake(){
     setSquare(n1->x, n1->y, 0x23);
     setSquare(n2->x, n2->y, 0x23);
 
-    unsigned int last_iteration_time = get_time_seconds();
+    long long last_iteration_time = get_system_timer_seconds();
 
     while (1) {
         if (uart_isReadByteReady()) {
@@ -70,7 +70,7 @@ void main_snake(){
             }
         }
 
-        if (get_time_seconds() - last_iteration_time >= 1) {
+        if (get_system_timer_seconds() - last_iteration_time >= 1) {
             if (iteration % 100 == 0) {
                 add_random_bonus();
             }
@@ -96,7 +96,7 @@ void main_snake(){
             setSquare(current->next->x, current->next->y, 0x00);
             free(current->next);
             current->next = NULL;
-            last_iteration_time = get_time_seconds();
+            last_iteration_time = get_system_timer_seconds();
             iteration++;
         }
     }

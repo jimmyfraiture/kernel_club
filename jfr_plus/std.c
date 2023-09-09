@@ -1,6 +1,7 @@
 #ifndef _STDDEF_H
 #define _STDDEF_H
 typedef unsigned int size_t;
+#define BCM2835_SYSTEM_TIMER_BASE 0x20003000
 #ifndef NULL
 #define NULL ((void*)0)
 #endif
@@ -69,9 +70,20 @@ void free(void* ptr) {
     }
 }
 
-// Get the current time in seconds
-unsigned int get_time_seconds() {
-    unsigned int time;
-    asm volatile("mrc p15, 0, %0, c9, c14, 0" : "=r"(time));
-    return time;
+
+// Define a pointer to the system timer registers
+volatile unsigned int* system_timer_regs = (unsigned int*)BCM2835_SYSTEM_TIMER_BASE;
+
+// Define a function to get the current time in seconds
+unsigned int get_system_timer_seconds() {
+    // Read the lower 32 bits of the system timer counter
+    unsigned int counter_low = system_timer_regs[1];
+    // Read the upper 32 bits of the system timer counter
+    unsigned int counter_high = system_timer_regs[3];
+
+    // Combine the upper and lower bits to get the full 64-bit value
+    unsigned long long counter_value = ((unsigned long long)counter_high << 32) | counter_low;
+
+    // The system timer runs at 1 MHz, so divide by 1,000,000 to get seconds
+    return (unsigned int)(counter_value / 1000000);
 }
