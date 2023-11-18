@@ -25,6 +25,7 @@ void add_random_bonus(){
     bonus_available = 1;
 }
 
+
 void main_snake(){
     int x_direction = 1;
     int y_direction = 0;
@@ -113,3 +114,4 @@ void main_snake(){
     
     }
 }
+

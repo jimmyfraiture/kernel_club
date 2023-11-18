@@ -1,4 +1,13 @@
-void main()
-{
-    while (1);
+#include "io.h"
+#include "fb.h"
+#include "gpu.h"
+#include "tetris.h"
+#include "std.h"
+
+void main() {
+    uart_init();
+    fb_init();
+    mem_init();
+
+    main_tetris();
 }
