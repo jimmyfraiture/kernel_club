@@ -1,6 +1,6 @@
 CFILES = $(wildcard *.c)
 OFILES = $(CFILES:.c=.o)
-LLVMPATH = /opt/llvm/bin
+LLVMPATH = /usr/bin
 CLANGFLAGS = -Wall -O2 -ffreestanding -nostdinc -nostdlib -mcpu=cortex-a72+nosimd
 
 all: clean kernel8.img

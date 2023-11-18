@@ -25,5 +25,5 @@ jobs:
 
     - name: Build binary
       run: |
-        cd jfr_plus && clang -v 
+        cd jfr_plus && make 
 
