@@ -21,9 +21,9 @@ jobs:
         release: '10-2021.10'
 
     - name: Update & install deps
-      run: sudo apt update && sudo apt install clang-15
+      run: sudo apt update && sudo apt install clang
 
     - name: Build binary
       run: |
-        cd jfr_plus && make 
+        cd jfr_plus && clang -v 
 
