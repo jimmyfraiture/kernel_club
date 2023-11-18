@@ -23,9 +23,6 @@ jobs:
     - name: Update & install deps
       run: sudo apt update && sudo apt install clang-15
 
-    - name: Check content
-      run: sudo apt install ls && ls /opt
-
     - name: Build binary
       run: |
         cd jfr_plus && make 
