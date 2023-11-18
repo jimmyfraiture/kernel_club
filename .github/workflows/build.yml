@@ -25,7 +25,5 @@ jobs:
 
     - name: Build binary
       run: |
-        sudo apt-get install -y gcc-9 llvm-10 clang-10
-
         cd jfr_plus && make 
 
