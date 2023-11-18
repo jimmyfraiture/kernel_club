@@ -1,3 +1,8 @@
+#include "gpu.h"
+#include "io.h"
+#include "std.h"
+#include "fb.h"
+
 void drawShape(int x, int y, int shape[4][4], int color) {
     int i, j;
     for (i = 0; i < 4; i++) {
