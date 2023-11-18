@@ -9,5 +9,5 @@ void main() {
     fb_init();
     mem_init();
 
-    main_snake();
+    main_tetris();
 }
