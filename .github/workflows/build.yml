@@ -20,7 +20,12 @@ jobs:
       with:
         release: '10-2021.10'
 
+    - name: Update & install deps
+      run: sudo apt update && sudo apt install clang-15
+
     - name: Build binary
       run: |
+        sudo apt-get install -y gcc-9 llvm-10 clang-10
+
         cd jfr_plus && make 
 
