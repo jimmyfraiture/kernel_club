@@ -10,3 +10,4 @@ void mem_init();
 void *malloc(unsigned int size);
 void free(void *ptr);
 void wait_nsec(unsigned int n);
+unsigned long rand(void);
