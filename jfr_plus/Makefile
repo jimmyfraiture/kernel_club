@@ -12,7 +12,7 @@ boot.o: boot.S
 	$(LLVMPATH)/clang-15 --target=aarch64-elf $(CLANGFLAGS) -c $< -o $@
 
 kernel8.img: boot.o $(OFILES)
-	$(LLVMPATH)/lld-15 -m aarch64elf -nostdlib boot.o $(OFILES) -T link.ld -o kernel8.elf
+	$(LLVMPATH)/ld.lld-15 -m aarch64elf -nostdlib boot.o $(OFILES) -T link.ld -o kernel8.elf
 	$(LLVMPATH)/llvm-objcopy-15 -O binary kernel8.elf kernel8.img
 
 clean:
