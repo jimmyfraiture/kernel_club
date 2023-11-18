@@ -1,7 +1,7 @@
 #include "io.h"
 #include "fb.h"
 #include "gpu.h"
-#include "snake.h"
+#include "tetris.h"
 #include "std.h"
 
 void main() {
