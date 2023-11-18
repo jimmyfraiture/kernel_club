@@ -60,12 +60,13 @@ void main_tetris(){
     int current_shape = 2;
     int current_x = 0;
     int current_y = 0;
-    int current_color = 0x40;
+    int current_color = 0x10;
     int current_rotation = 0;
     int i, j;
     int iteration = 0;
     int score = 0;
     int game_over = 0;
+    clearScreen();
 
     // draw the ground
 
@@ -76,11 +77,11 @@ void main_tetris(){
             current_shape = (current_shape + 1) % 7;
             current_x = 0;
             current_y = 0;
-            current_color = 0x40;
+            current_color = current_color + 0x10;
         }
 
         // draw the current shape
-        drawShape(current_x, current_y, shapes[current_shape], 0x20);
+        drawShape(current_x, current_y, shapes[current_shape], 0xf0);
         current_y++;
         drawShape(current_x, current_y, shapes[current_shape], current_color);
 
