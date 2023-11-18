@@ -1,0 +1,26 @@
+# see https://gist.github.com/palewire/12c4b2b974ef735d22da7493cf7f4d37
+
+name: Build containers & push to artifact registry
+on:
+  push:
+    branches:
+      - seb_test
+
+jobs:
+  build:
+    name: Build please
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: arm-none-eabi-gcc
+      uses: ryanwinter/arm-none-eabi-gcc@master
+      with:
+        release: '10-2021.10'
+
+    - name: Build binary
+      run: |
+        cd jfr_plus && make 
+
