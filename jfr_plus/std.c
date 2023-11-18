@@ -67,20 +67,32 @@ void wait_nsec(unsigned int n)
 }
 
 
-unsigned long state0 = 1;
-unsigned long state1 = 2;
+int rand() {
+    register unsigned long f, t, r;
+    asm volatile ("mrs %0, cntfrq_el0" : "=r"(f));
+    asm volatile ("mrs %0, cntpct_el0" : "=r"(t));
+    
+    // Use the timer value as a seed to generate a random number
+    r = t % f;
 
-unsigned long rand(void)
-{
-    unsigned long s1 = state0;
-    unsigned long s0 = state1;
-
-    state0 = s0;
-    s1 ^= s1 << 23;
-    s1 ^= s1 >> 17;
-    s1 ^= s0;
-    s1 ^= s0 >> 26;
-    state1 = s1;
-
-    return state0 + state1;
+    return (int)r;
 }
+
+
+// unsigned long state0 = 1;
+// unsigned long state1 = 2;
+
+// unsigned long rand(void)
+// {
+//     unsigned long s1 = state0;
+//     unsigned long s0 = state1;
+
+//     state0 = s0;
+//     s1 ^= s1 << 23;
+//     s1 ^= s1 >> 17;
+//     s1 ^= s0;
+//     s1 ^= s0 >> 26;
+//     state1 = s1;
+
+//     return state0 + state1;
+// }

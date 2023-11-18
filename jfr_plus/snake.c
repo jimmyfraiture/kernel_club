@@ -8,9 +8,12 @@ typedef struct node {
     struct node *next;
 } node;
 
+void main_snake();
+
 void game_over(){
     game_over_screen();
-    while(1){}
+    wait_nsec(15000000);
+    main_snake();
 }
 
 void main_snake(){
@@ -45,19 +48,22 @@ void main_snake(){
     set_square(x_bonus, y_bonus, 0x43);
 
     while (1) {
-        // Compute the direction of the snake
-        if(x_bonus > head->x){
+        // Compute the direction of the snake // todo encore empecher qu il fasse demi tour
+        if(x_bonus > head->x && x_direction != -1){
             x_direction = 1;
             y_direction = 0;
-        } else if(x_bonus < head-> x){
+        } else if(x_bonus < head-> x && x_direction != 1){
             x_direction = -1;
             y_direction = 0;
-        } else if(y_bonus < head-> y){
+        } else if(y_bonus < head-> y && y_direction != 1){
             y_direction = -1;
             x_direction = 0;
-        } else{
+        } else if (y_direction != -1){
             y_direction = 1;
             x_direction = 0;
+        } else {
+            x_direction = 1;
+            y_direction = 0;
         }
 
         // Compute new head position
@@ -99,6 +105,6 @@ void main_snake(){
             current->next = NULL;
         }
 
-        wait_nsec(300000);    
+        wait_nsec(100000);
     }
 }
