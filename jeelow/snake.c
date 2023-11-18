@@ -190,12 +190,12 @@ void main_tetris(){
         drawShape(current_x, current_y, shapes[current_shape], current_color);
         current_y++;
         //if current_y is 35, then the shape is on the ground and we spawn another shape
-        if(current_y == 35){
-            current_shape = rand() % 7;
-            current_x = 0;
-            current_y = 0;
-            current_color = 0x40;
-        }
+        // if(current_y == 35){
+        //     current_shape = rand() % 7;
+        //     current_x = 0;
+        //     current_y = 0;
+        //     current_color = 0x40;
+        // }
 
         wait_nsec(300000);
         clearScreen();
