@@ -31,5 +31,10 @@ jobs:
 
     - name: Build binary
       run: |
-        cd jfr_plus && make 
+        cd jfr_plus && pwd && make
 
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: kernel8
+        path: kernel8.img
