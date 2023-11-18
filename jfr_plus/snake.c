@@ -1,6 +1,7 @@
 #include "gpu.h"
 #include "io.h"
 #include "std.h"
+#include "fb.h"
 typedef struct node {
     int x;
     int y;
@@ -50,8 +51,6 @@ void main_snake(){
     setSquare(n1->x, n1->y, 0x23);
     setSquare(n2->x, n2->y, 0x23);
 
-    long long last_iteration_time = get_system_timer_seconds();
-
     while (1) {
         if (uart_isReadByteReady()) {
             char c = uart_readByte();
@@ -70,34 +69,39 @@ void main_snake(){
             }
         }
 
-        if (get_system_timer_seconds() - last_iteration_time >= 1) {
-            if (iteration % 100 == 0) {
-                add_random_bonus();
-            }
-            int new_x = head->x + x_direction;
-            int new_y = head->y + y_direction;
-
-            if (new_x < 0) new_x = 40 - 1;
-            if (new_x >= 40) new_x = 0;
-            if (new_y < 0) new_y = 35 - 1;
-            if (new_y >= 35) new_y = 0;
-
-            node *new_head = malloc(sizeof(node));
-            new_head->x = new_x;
-            new_head->y = new_y;
-            new_head->next = head;
-            head = new_head;
-            setSquare(head->x, head->y, 0x23);
-
-            node *current = head;
-            while (current->next->next != NULL)
-                current = current->next;
-
-            setSquare(current->next->x, current->next->y, 0x00);
-            free(current->next);
-            current->next = NULL;
-            last_iteration_time = get_system_timer_seconds();
-            iteration++;
+        if (iteration == 0) {
+            add_random_bonus();
         }
+        int new_x = head->x + x_direction;
+        int new_y = head->y + y_direction;
+
+        if (new_x < 0) new_x = 40 - 1;
+        if (new_x >= 40) new_x = 0;
+        if (new_y < 0) new_y = 35 - 1;
+        if (new_y >= 35) new_y = 0;
+
+        // Get new head
+        node *new_head = malloc(sizeof(node)); // todo the malloc does not work
+        if(new_head == NULL){
+            drawString(500, 200, "Error on the malloc. FUCK ! ", 0x0f);
+        }
+        new_head->x = new_x;
+        new_head->y = new_y;
+        new_head->next = head;
+        head = new_head;
+        setSquare(head->x, head->y, 0x23);
+
+        // Move tail
+        node *current = head;
+        while (current->next->next != NULL)
+            current = current->next;
+        setSquare(current->next->x, current->next->y, 0x30);
+        free(current->next);
+        current->next = NULL;
+
+        // Loopers
+        iteration = (iteration + 1) % 100;
+        wait_nsec(500000);
+    
     }
 }
