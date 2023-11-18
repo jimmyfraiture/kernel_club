@@ -38,4 +38,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: kernel8
-        path: /home/runner/work/kernel_club/kernel_club/jfr_plus/kernel8.img
+        path: /home/runner/work/kernel_club/kernel_club/jeelow/kernel8.img
