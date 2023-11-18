@@ -7,7 +7,7 @@
 void main() {
     uart_init();
     fb_init();
-    initialize_heap();
+    mem_init();
 
     main_snake();
 }
