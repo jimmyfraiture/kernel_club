@@ -65,3 +65,22 @@ void wait_nsec(unsigned int n)
     t+=((f/1000)*n)/1000; // Exp of the counter
     do{asm volatile ("mrs %0, cntpct_el0" : "=r"(r));}while(r<t);
 }
+
+
+unsigned long state0 = 1;
+unsigned long state1 = 2;
+
+unsigned long rand(void)
+{
+    unsigned long s1 = state0;
+    unsigned long s0 = state1;
+
+    state0 = s0;
+    s1 ^= s1 << 23;
+    s1 ^= s1 >> 17;
+    s1 ^= s0;
+    s1 ^= s0 >> 26;
+    state1 = s1;
+
+    return state0 + state1;
+}
