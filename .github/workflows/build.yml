@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - seb_test
+      - just_un_tetris
 
 jobs:
   build:
@@ -31,7 +32,7 @@ jobs:
 
     - name: Build binary
       run: |
-        cd jfr_plus && pwd && make
+        cd jeelow && pwd && make
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
