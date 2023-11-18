@@ -5,7 +5,7 @@
 int SCREEN_WIDTH = 800;
 int SCREEN_HEIGHT = 600;
 
-struct __attribute__((aligned(16))) Point
+typedef struct __attribute__((aligned(16))) Point
 {
     int x;
     int y;
@@ -13,9 +13,7 @@ struct __attribute__((aligned(16))) Point
     int dy;
     int r;
     unsigned char color;
-};
-
-typedef struct Point Point;
+} Point;
 
 void updatePoint(Point* p) {
     if (p->x < 0 || p->x > SCREEN_WIDTH) {
@@ -54,9 +52,11 @@ void main()
         {75, 250, 2, 3, 30, 0xaa},
     };
 
-    uart_writeText("???");
+    uart_writeText("Main is running...");
 
     while (1) {
+        uart_writeText("Loop body");
+
         // Clear.
         // for (int i = 0; i < 2; ++i) {
         //     drawCircle(
@@ -67,8 +67,6 @@ void main()
         //         1
         //     );
         // }
-
-        uart_writeText("Hello");
 
         // Simulate physics.
         for (int i = 0; i < 2; ++i) {
@@ -88,6 +86,6 @@ void main()
         // }
 
         // Wait a bit.
-        // sleep();
+        sleep();
     }
 }
