@@ -24,6 +24,11 @@ jobs:
       run: sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
 
 
+
+    - name: Check install
+      run: |
+        ls /opt && ls /bin 
+
     - name: Build binary
       run: |
         cd jfr_plus && make 
