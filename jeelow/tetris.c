@@ -58,9 +58,9 @@ void main_tetris(){
     // init the game
     clearScreen();
     int current_shape = 2;
-    int current_x = 10;
+    int current_x = 0;
     int current_y = 0;
-    int current_color = 0x23;
+    int current_color = 0x40;
     int current_rotation = 0;
     int i, j;
     int iteration = 0;
@@ -71,18 +71,17 @@ void main_tetris(){
 
     // main loop
     while (1) {
-        // draw the current shape
-        drawShape(current_x, current_y, shapes[current_shape], 0x00);
-        current_y++;
-
         //if current_y is 35, then the shape is on the ground and we spawn another shape
         if(current_y == 35){
             current_shape = (current_shape + 1) % 7;
             current_x = 0;
             current_y = 0;
             current_color = 0x40;
-
         }
+
+        // draw the current shape
+        drawShape(current_x, current_y, shapes[current_shape], 0x20);
+        current_y++;
         drawShape(current_x, current_y, shapes[current_shape], current_color);
 
         wait_nsec(300000);
