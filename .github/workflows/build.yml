@@ -20,8 +20,9 @@ jobs:
     #   with:
     #     release: '10-2021.10'
 
-    - name: Update & install deps
-      run: sudo apt update && sudo apt install llvm clang && ls /usr/bin/clang && ls /usr/bin/llvm
+    - name: Install llvm
+      run: bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+
 
     - name: Build binary
       run: |
