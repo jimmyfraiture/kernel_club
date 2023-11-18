@@ -7,83 +7,61 @@ typedef unsigned int size_t;
 #endif
 #endif
 
-#define HEAP_SIZE 1024 * 1024  // 1 MB
-#define MIN_BLOCK_SIZE sizeof(Block)
+// Define the heap
 
-typedef struct Block {
-    size_t size;
-    struct Block* next;
-} Block;
+extern unsigned char _end[];
+// unsigned char *HEAP_START = &_end[0]; // End of kernel
 
-static char heap[HEAP_SIZE];
-static Block* free_list = NULL;
+unsigned char *HEAP_START = (unsigned char *)0x400000; // Top of stack
+unsigned int   HEAP_SIZE  = 0x30000000; // Max heap size is 768Mb
+unsigned char *HEAP_END;
 
-void initialize_heap() {
-    free_list = (Block*)heap;
-    free_list->size = HEAP_SIZE - sizeof(Block);
-    free_list->next = NULL;
+// Set up some static globals
+
+static unsigned char *freeptr;
+static unsigned int bytes_allocated = 0;
+
+void mem_init()
+{
+   // Align the start of heap to an 8-byte boundary
+
+   if ((long)HEAP_START % 8 != 0) {
+      HEAP_START += 8 - ((long)HEAP_START % 8);
+   }
+   HEAP_END = (unsigned char *)(HEAP_START + HEAP_SIZE);
+
+   freeptr = HEAP_START;
 }
 
-void* malloc(size_t size) {
-    // Ensure that size is at least the size of a Block
-    if (size < MIN_BLOCK_SIZE) {
-        size = MIN_BLOCK_SIZE;
-    }
+void *malloc(unsigned int size)
+{
+   if (size > 0) {
+      void *allocated = freeptr;
+      if ((long)allocated % 8 != 0) {
+         allocated += 8 - ((long)allocated % 8);
+      }
+    
+      if ((unsigned char *)(allocated + size) > HEAP_END) {
+         return 0;
+      } else {
+         freeptr += size;
+         bytes_allocated += size;
 
-    Block* prev = NULL;
-    Block* current = free_list;
-
-    while (current) {
-        if (current->size >= size) {
-            if (current->size >= size + sizeof(Block)) {
-                // Split the block if it's large enough
-                Block* new_block = (Block*)((char*)current + size);
-                new_block->size = current->size - size - sizeof(Block);
-                new_block->next = current->next;
-                current->size = size;
-                current->next = new_block;
-            }
-
-            if (prev) {
-                prev->next = current->next;
-            } else {
-                free_list = current->next;
-            }
-
-            return (void*)(current + 1); // Return a pointer to the data part
-        }
-
-        prev = current;
-        current = current->next;
-    }
-
-    // No suitable free block found
-    return NULL;
+         return allocated;
+      }
+   }
+   return 0;
 }
 
-void free(void* ptr) {
-    if (ptr) {
-        // Convert the data pointer back to a Block pointer
-        Block* block = ((Block*)ptr) - 1;
-        block->next = free_list;
-        free_list = block;
-    }
+void free(void *ptr) {
+   // TODO
 }
 
-
-// Define a pointer to the system timer registers
-volatile unsigned int* system_timer_regs = (unsigned int*)BCM2835_SYSTEM_TIMER_BASE;
-
-// Define a function to get the current time in seconds
-unsigned int get_system_timer_seconds() {
-    // Read the lower 32 bits of the system timer counter
-    unsigned int counter_low = system_timer_regs[1];
-    // Read the upper 32 bits of the system timer counter
-    unsigned int counter_high = system_timer_regs[3];
-
-    // Combine the upper and lower bits to get the full 64-bit value
-    unsigned long long counter_value = ((unsigned long long)counter_high << 32) | counter_low;
-
-    // The system timer runs at 1 MHz, so divide by 1,000,000 to get seconds
-    return (unsigned int)(counter_value / 1000000);
+void wait_nsec(unsigned int n)
+{
+    register unsigned long f, t, r;
+    asm volatile ("mrs %0, cntfrq_el0" : "=r"(f));
+    asm volatile ("mrs %0, cntpct_el0" : "=r"(t));
+    t+=((f/1000)*n)/1000; // Exp of the counter
+    do{asm volatile ("mrs %0, cntpct_el0" : "=r"(r));}while(r<t);
 }

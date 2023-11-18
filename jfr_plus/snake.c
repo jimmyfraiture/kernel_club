@@ -1,6 +1,7 @@
 #include "gpu.h"
 #include "io.h"
 #include "std.h"
+#include "fb.h"
 typedef struct node {
     int x;
     int y;
@@ -12,6 +13,7 @@ int random_seed_x[30] = {16, 18, 14, 20, 9, 30, 11, 14, 20, 22, 16, 16, 12, 10, 
 int random_seed_y[30] = {13, 23, 2, 10, 15, 9, 26, 8, 20, 25, 17, 16, 24, 1, 19, 7, 3, 11, 6, 29, 12, 28, 27, 5, 21, 14, 22, 4, 30, 10};
 int random_index_x = 0;
 int random_index_y = 0;
+int bonus_available = 0;
 
 void add_random_bonus(){
     random_index_x = (random_index_x + 1) % 30;
@@ -20,6 +22,7 @@ void add_random_bonus(){
     int x = random_seed_x[random_index_x];
     int y = random_seed_y[random_index_y];
     setSquare(x, y, 0x13);
+    bonus_available = 1;
 }
 
 void main_snake(){
@@ -50,54 +53,63 @@ void main_snake(){
     setSquare(n1->x, n1->y, 0x23);
     setSquare(n2->x, n2->y, 0x23);
 
-    long long last_iteration_time = get_system_timer_seconds();
-
     while (1) {
-        if (uart_isReadByteReady()) {
-            char c = uart_readByte();
-            if (c == 'w') {
-                x_direction = 0;
-                y_direction = -1;
-            } else if (c == 'a') {
-                x_direction = -1;
-                y_direction = 0;
-            } else if (c == 's') {
-                x_direction = 0;
-                y_direction = 1;
-            } else if (c == 'd') {
+        // Compute the direction of the snake
+        if(bonus_available == 1){
+            int x_bonus = random_seed_x[random_index_x];
+            int y_bonus = random_seed_y[random_index_y];
+            if(x_bonus > head->x){
                 x_direction = 1;
                 y_direction = 0;
+            } else if(x_bonus < head-> x){
+                x_direction = -1;
+                y_direction = 0;
+            } else if(y_bonus < head-> y){
+                y_direction = -1;
+                x_direction = 0;
+            } else{
+                y_direction = 1;
+                x_direction = 0;
             }
         }
 
-        if (get_system_timer_seconds() - last_iteration_time >= 1) {
-            if (iteration % 100 == 0) {
-                add_random_bonus();
-            }
-            int new_x = head->x + x_direction;
-            int new_y = head->y + y_direction;
+        if (iteration == 0) {
+            add_random_bonus();
+        }
+        int new_x = head->x + x_direction;
+        int new_y = head->y + y_direction;
 
-            if (new_x < 0) new_x = 40 - 1;
-            if (new_x >= 40) new_x = 0;
-            if (new_y < 0) new_y = 35 - 1;
-            if (new_y >= 35) new_y = 0;
+        if (new_x < 0) new_x = 40 - 1;
+        if (new_x >= 40) new_x = 0;
+        if (new_y < 0) new_y = 35 - 1;
+        if (new_y >= 35) new_y = 0;
 
-            node *new_head = malloc(sizeof(node));
-            new_head->x = new_x;
-            new_head->y = new_y;
-            new_head->next = head;
-            head = new_head;
-            setSquare(head->x, head->y, 0x23);
+        // Get new head
+        node *new_head = malloc(sizeof(node)); // todo the malloc does not work
+        if(new_head == NULL){
+            drawString(500, 200, "Error on the malloc. FUCK ! ", 0x0f);
+        }
+        new_head->x = new_x;
+        new_head->y = new_y;
+        new_head->next = head;
+        head = new_head;
+        setSquare(head->x, head->y, 0x23);
 
+        // Check if the new head is on a bonus
+        if(head->x == random_seed_x[random_index_x] && head->y == random_seed_x[random_index_y]){
+            bonus_available = 0;
+        } else { // If not, move the tail
             node *current = head;
             while (current->next->next != NULL)
                 current = current->next;
-
-            setSquare(current->next->x, current->next->y, 0x00);
+            setSquare(current->next->x, current->next->y, 0x30);
             free(current->next);
             current->next = NULL;
-            last_iteration_time = get_system_timer_seconds();
-            iteration++;
         }
+
+        // Loopers
+        iteration = (iteration + 1) % 60;
+        wait_nsec(300000);
+    
     }
 }
