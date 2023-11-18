@@ -6,7 +6,7 @@ typedef unsigned int size_t;
 #endif
 #endif
 
-void initialize_heap();
-void* malloc(size_t size);
-void free(void* ptr);
-unsigned int get_system_timer_seconds();
+void mem_init();
+void *malloc(unsigned int size);
+void free(void *ptr);
+void wait_nsec(unsigned int n);
