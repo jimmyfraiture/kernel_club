@@ -9,8 +9,7 @@ typedef struct node {
 } node;
 
 void game_over(){
-    clearScreen();
-    drawString(10, 10, "GAME OVER", 0x04);
+    game_over_screen();
     while(1){}
 }
 
@@ -23,7 +22,7 @@ void main_snake(){
     node *n2 = malloc(sizeof(node));
 
     if(head == NULL || n1 == NULL || n2 == NULL) {
-        setSquare(0, 0, 0x55);
+        set_square(0, 0, 0x55);
         while(1);
     }
 
@@ -39,11 +38,11 @@ void main_snake(){
     int y_bonus = 20; //rand() % MATRIX_HEIGHT;
 
     // Display
-    clearScreen();
-    setSquare(head->x, head->y, 0x23);
-    setSquare(n1->x, n1->y, 0x23);
-    setSquare(n2->x, n2->y, 0x23);
-    setSquare(x_bonus, y_bonus, 0x43);
+    clear_screen();
+    set_square(head->x, head->y, 0x23);
+    set_square(n1->x, n1->y, 0x23);
+    set_square(n2->x, n2->y, 0x23);
+    set_square(x_bonus, y_bonus, 0x43);
 
     while (1) {
         // Compute the direction of the snake
@@ -79,14 +78,14 @@ void main_snake(){
         new_head->y = new_y;
         new_head->next = head;
         head = new_head;
-        setSquare(head->x, head->y, 0x23);
+        set_square(head->x, head->y, 0x23);
 
         // Check if the new head is on a bonus
         if(head->x == x_bonus && head->y == y_bonus){
             // Add a new bonus somewhere
             x_bonus = rand() % MATRIX_WIDTH;
             y_bonus = rand() % MATRIX_HEIGHT;
-            setSquare(x_bonus, y_bonus, 0x43);
+            set_square(x_bonus, y_bonus, 0x43);
         } else { // If not, move the tail
             node *current = head;
             while (current->next->next != NULL) {
@@ -95,7 +94,7 @@ void main_snake(){
                     game_over();
                 }
             }
-            setSquare(current->next->x, current->next->y, 0x00); // todo ensure this is ok
+            set_square(current->next->x, current->next->y, 0x00); // todo ensure this is ok
             free(current->next);
             current->next = NULL;
         }

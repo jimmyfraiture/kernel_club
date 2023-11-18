@@ -11,5 +11,6 @@
 #endif
 
 
-void setSquare(int x, int y, unsigned char attr);
-void clearScreen();
+void set_square(int x, int y, unsigned char attr);
+void clear_screen();
+void game_over_screen();
