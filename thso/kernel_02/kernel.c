@@ -5,7 +5,7 @@
 int SCREEN_WIDTH = 800;
 int SCREEN_HEIGHT = 600;
 
-struct __attribute__((aligned(16))) Point
+typedef struct __attribute__((aligned(16))) Point
 {
     int x;
     int y;
@@ -13,9 +13,7 @@ struct __attribute__((aligned(16))) Point
     int dy;
     int r;
     unsigned char color;
-};
-
-typedef struct Point Point;
+} Point;
 
 void updatePoint(Point* p) {
     if (p->x < 0 || p->x > SCREEN_WIDTH) {
@@ -46,7 +44,7 @@ void debug_print(long l) {
 void main()
 {
     uart_init();
-    fb_init();
+    // fb_init();
 
     Point points[3] = {
         {100, 100, 2, -2, 10, 0xee},
@@ -54,23 +52,25 @@ void main()
         {75, 250, 2, 3, 30, 0xaa},
     };
 
-    while (1) {
-        // Clear.
-        for (int i = 0; i < 2; ++i) {
-            drawCircle(
-                points[i].x - points[i].dy, 
-                points[i].y - points[i].dy, 
-                30, 
-                0x00, 
-                1
-            );
-        }
+    uart_writeText("Main is running...");
 
-        uart_writeText("Hello");
+    while (1) {
+        uart_writeText("Loop body");
+
+        // Clear.
+        // for (int i = 0; i < 2; ++i) {
+        //     drawCircle(
+        //         points[i].x - points[i].dy, 
+        //         points[i].y - points[i].dy, 
+        //         30, 
+        //         0x00, 
+        //         1
+        //     );
+        // }
 
         // Simulate physics.
         for (int i = 0; i < 2; ++i) {
-            updatePoint(&points[i]);
+            // updatePoint(&points[i]);
 
             // Debug.
             uart_writeText("Point:");
@@ -81,9 +81,9 @@ void main()
         }
 
         // Draw objects.
-        for (int i = 0; i < 2; ++i) {
-            drawCircle(points[i].x, points[i].y, points[i].r, points[i].color, 1);
-        }
+        // for (int i = 0; i < 2; ++i) {
+        //     drawCircle(points[i].x, points[i].y, points[i].r, points[i].color, 1);
+        // }
 
         // Wait a bit.
         sleep();
